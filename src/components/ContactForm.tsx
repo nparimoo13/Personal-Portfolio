@@ -15,34 +15,29 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSuccess, onError }) 
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
 
-  const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined
+  const recipientEmail = PORTFOLIO_DATA.personal.contact.formRecipientEmail
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-
-    if (!accessKey) {
-      onError('Contact form is not configured. Add VITE_WEB3FORMS_ACCESS_KEY to .env.local.')
-      return
-    }
-
     setStatus('submitting')
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          access_key: accessKey,
           name,
           email,
           message,
-          subject: `Portfolio message from ${name}`,
+          _subject: `Portfolio contact from ${name}`,
+          _captcha: 'false',
+          _template: 'table',
         }),
       })
 
-      const data = (await res.json()) as { success?: boolean; message?: string }
+      const data = (await res.json()) as { success?: string; message?: string }
 
-      if (!res.ok || !data.success) {
+      if (!res.ok || data.success !== 'true') {
         throw new Error(data.message ?? 'Something went wrong. Please try again.')
       }
 
@@ -84,6 +79,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSuccess, onError }) 
           <p className="mt-6 text-sm text-emerald-400">Thanks — your message was sent.</p>
         ) : (
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden />
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="contact-name" className="block text-xs text-slate-500 mb-1.5">

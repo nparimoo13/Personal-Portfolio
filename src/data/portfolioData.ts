@@ -4,6 +4,7 @@ export interface Project {
   summary: string
   tags: string[]
   githubUrl: string
+  liveUrl?: string
 }
 
 export interface Experience {
@@ -24,6 +25,7 @@ export const PORTFOLIO_DATA = {
       location: 'Irvine, CA · Open to remote',
       linkedin: 'https://www.linkedin.com/in/nparimoo/',
       github: 'https://github.com/nparimoo13',
+      formRecipientEmail: 'nparimoo13@gmail.com',
     },
   },
 
@@ -43,6 +45,7 @@ export const PORTFOLIO_DATA = {
         'Fantasy football app that pulls Sleeper, ESPN, and Yahoo data for player ratings, trades, and AI roster insights.',
       tags: ['Node.js', 'Express', 'Convex', 'OpenAI', 'Tailwind'],
       githubUrl: 'https://github.com/nparimoo13/Rec-League-Fantasy-AI-Analayzer',
+      liveUrl: 'https://recleaguefantasy.com',
     },
     {
       id: 'showdown-support',
